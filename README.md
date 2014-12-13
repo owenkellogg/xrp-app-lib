@@ -9,14 +9,15 @@ A small javascript library for creating XRP-based wallets
 
 ## Usage
   
-  createWallet()
+    Wallet createWallet()
 
-  importWalletFromSecret(PrivateKey)
+    Wallet importWalletFromSecret(PrivateKey)
 
-  updateBalance(Wallet)
+    Promise<Decimal> updateBalance(Wallet)
 
-  sendPayment({
-    to: Wallet,
-    amount: Decimal
-  })
+    Promise<Payment> sendPayment({
+      to: Wallet,
+      from: Wallet,
+      amount: Decimal
+    })
 

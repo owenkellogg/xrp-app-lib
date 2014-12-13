@@ -6,19 +6,24 @@ var _ = require('lodash');
 class Wallet {
 
   constructor(options) {
+    this._balance = 0;
     if (!options) { var options = {} };
     var wallet;
     if (!options.secretKey) {
       wallet = rippleLib.Wallet.generate();
       this._publicKey = wallet.address;
       this._secretKey = wallet.secret;
-      this._balance = 0;
     } else {
       var secret = options.secretKey;
       wallet = new rippleLib.Wallet(secret);
       this._publicKey = wallet.getAddress().value;
       this._secretKey = wallet.secret;
     }
+  }
+
+  static generate() {
+    var wallet = rippleLib.Wallet.generate();
+    return new Wallet({ secretKey: wallet.secret });
   }
 
   get publicKey() {
@@ -28,6 +33,7 @@ class Wallet {
   get secretKey() {
     return this._secretKey;
   }
+
   get balance() {
     return this._balance;
   }

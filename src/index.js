@@ -9,7 +9,7 @@ class XRPLib {
   }
 
   createWallet() {
-    return new Wallet;
+    return Wallet.generate();
   }
 
   importWalletFromSecret(key) {

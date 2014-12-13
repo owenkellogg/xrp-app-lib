@@ -13,7 +13,7 @@ var XRPLib = (function () {
   var XRPLib = function XRPLib() {};
 
   XRPLib.prototype.createWallet = function () {
-    return new Wallet();
+    return Wallet.generate();
   };
 
   XRPLib.prototype.importWalletFromSecret = function (key) {

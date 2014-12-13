@@ -12,6 +12,7 @@ var _ = require("lodash");
 
 var Wallet = (function () {
   var Wallet = function Wallet(options) {
+    this._balance = 0;
     if (!options) {
       var options = {};
     };
@@ -20,13 +21,17 @@ var Wallet = (function () {
       wallet = rippleLib.Wallet.generate();
       this._publicKey = wallet.address;
       this._secretKey = wallet.secret;
-      this._balance = 0;
     } else {
       var secret = options.secretKey;
       wallet = new rippleLib.Wallet(secret);
       this._publicKey = wallet.getAddress().value;
       this._secretKey = wallet.secret;
     }
+  };
+
+  Wallet.generate = function () {
+    var wallet = rippleLib.Wallet.generate();
+    return new Wallet({ secretKey: wallet.secret });
   };
 
   Wallet.prototype.sendPayment = function (options) {

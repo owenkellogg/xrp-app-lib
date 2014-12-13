@@ -1,0 +1,23 @@
+{
+  "name": "xrp-app-lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "npm run build && mocha -R spec test/ --timeout 20000",
+    "build": "gulp"
+  },
+  "author": "Steven Zeiler",
+  "license": "ISC",
+  "dependencies": {
+    "ripple-lib": "^0.9.4",
+    "superagent": "^0.21.0",
+    "bluebird": "^2.3.11",
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-6to5": "^1.0.2",
+    "mocha": "^2.0.1"
+  }
+}

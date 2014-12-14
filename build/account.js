@@ -6,10 +6,10 @@ var _classProps = function (child, staticProps, instanceProps) {
 };
 
 var Promise = require("bluebird");
-var http = Promise.promisifyAll(require("superagent"));
-var rippleLib = require("ripple-lib");
+var http = Promise.promisifyAll(require("superagent-browserify"));
 var _ = require("lodash");
-var Errors = require(__dirname + "/errors");
+var Errors = require("./errors");
+var rippleLib = window.ripple;
 
 var Account = (function () {
   var Account = function Account(options) {

@@ -6,10 +6,9 @@ var _classProps = function (child, staticProps, instanceProps) {
 };
 
 var Promise = require("bluebird");
-var rippleLib = require("ripple-lib");
-var Wallet = require(__dirname + "/wallet");
-var Account = require(__dirname + "/account");
-var Errors = require(__dirname + "/errors");
+var Wallet = require("./wallet");
+var Account = require("./account");
+var Errors = require("./errors");
 
 var XRPLib = (function () {
   var XRPLib = function XRPLib() {};

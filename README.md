@@ -13,10 +13,13 @@ A small javascript library for creating XRP-based wallets
 
     Wallet importWalletFromSecret(PrivateKey)
 
+    Account importAccountFromAddress(PublicKey)
+
+    Promise<Decimal> updateBalance(Account)
     Promise<Decimal> updateBalance(Wallet)
 
     Promise<Payment> sendPayment({
-      to: Wallet,
+      to: Account,
       from: Wallet,
       amount: Decimal
     })

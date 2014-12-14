@@ -1,9 +1,9 @@
 var Promise = require('bluebird');
-var rippleLib = require('ripple-lib');
-var http = Promise.promisifyAll(require('superagent'));
+var http = Promise.promisifyAll(require('superagent-browserify'));
 var _ = require('lodash');
-var Account = require(__dirname+'/account');
-var Errors = require(__dirname+'/errors');
+var Account = require('./account');
+var Errors = require('./errors');
+var rippleLib = window.ripple;
 
 class Wallet extends Account {
 

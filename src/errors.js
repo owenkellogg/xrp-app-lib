@@ -1,4 +1,3 @@
-
 class InvalidPrivateKey extends Error { }
 class InvalidPublicKey extends Error { }
 

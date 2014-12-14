@@ -2,40 +2,38 @@ var Promise = require('bluebird');
 var rippleLib = require('ripple-lib');
 var http = Promise.promisifyAll(require('superagent'));
 var _ = require('lodash');
+var Account = require(__dirname+'/account');
+var Errors = require(__dirname+'/errors');
 
-class Wallet {
+class Wallet extends Account {
 
   constructor(options) {
-    this._balance = 0;
-    if (!options) { var options = {} };
     var wallet;
-    if (!options.secretKey) {
+
+    if (!options) {
       wallet = rippleLib.Wallet.generate();
-      this._publicKey = wallet.address;
-      this._secretKey = wallet.secret;
+      this._balance = 0;
     } else {
-      var secret = options.secretKey;
-      wallet = new rippleLib.Wallet(secret);
-      this._publicKey = wallet.getAddress().value;
-      this._secretKey = wallet.secret;
+      if (rippleLib.Seed.is_valid(options.privateKey)) {
+        var secret = options.privateKey;
+        wallet = new rippleLib.Wallet(secret);
+        wallet.address = wallet.getAddress().value;
+        this._balance = undefined;
+      } else {
+        throw new Errors.InvalidPrivateKey
+      }
     }
+    this._publicKey = wallet.address;
+    this._privateKey = wallet.secret;
   }
 
   static generate() {
     var wallet = rippleLib.Wallet.generate();
-    return new Wallet({ secretKey: wallet.secret });
+    return new Wallet({ privateKey: wallet.secret });
   }
 
-  get publicKey() {
-    return this._publicKey;
-  }
-
-  get secretKey() {
-    return this._secretKey;
-  }
-
-  get balance() {
-    return this._balance;
+  get privateKey() {
+    return this._privateKey;
   }
 
   sendPayment(options) {
@@ -48,7 +46,7 @@ class Wallet {
     return new Promise(function(resolve, reject) {
       remote.connect(function(err, res) {
         if (err) { return reject(err) }
-        remote.setSecret(_this.publicKey, _this.secretKey) 
+        remote.setSecret(_this.publicKey, _this.privateKey) 
 
         remote.createTransaction('Payment', {
           account: _this.publicKey,
@@ -61,26 +59,6 @@ class Wallet {
           resolve(response);
         });
       });
-    });
-  }
-
-  updateBalance() {
-    var _this = this;
-    return new Promise(function(resolve, reject) {
-      http.get('https://api.ripple.com/v1/accounts/'+_this.publicKey+'/balances').endAsync()
-        .then(function(response) {
-          if (response.body.success) {
-            var balance = _.filter(response.body.balances, function(balance) {
-              return balance.currency === 'XRP'
-            })[0];
-            _this._balance = parseFloat(balance.value); 
-            resolve(parseFloat(balance.value));
-          } else {
-            _this._balance = 0;
-            resolve(0);
-          }
-        })
-        .catch(reject);
     });
   }
 }

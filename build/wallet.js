@@ -5,33 +5,51 @@ var _classProps = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
+var _extends = function (child, parent) {
+  child.prototype = Object.create(parent.prototype, {
+    constructor: {
+      value: child,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  child.__proto__ = parent;
+};
+
 var Promise = require("bluebird");
 var rippleLib = require("ripple-lib");
 var http = Promise.promisifyAll(require("superagent"));
 var _ = require("lodash");
+var Account = require(__dirname + "/account");
+var Errors = require(__dirname + "/errors");
 
-var Wallet = (function () {
+var Wallet = (function (Account) {
   var Wallet = function Wallet(options) {
-    this._balance = 0;
-    if (!options) {
-      var options = {};
-    };
     var wallet;
-    if (!options.secretKey) {
+
+    if (!options) {
       wallet = rippleLib.Wallet.generate();
-      this._publicKey = wallet.address;
-      this._secretKey = wallet.secret;
+      this._balance = 0;
     } else {
-      var secret = options.secretKey;
-      wallet = new rippleLib.Wallet(secret);
-      this._publicKey = wallet.getAddress().value;
-      this._secretKey = wallet.secret;
+      if (rippleLib.Seed.is_valid(options.privateKey)) {
+        var secret = options.privateKey;
+        wallet = new rippleLib.Wallet(secret);
+        wallet.address = wallet.getAddress().value;
+        this._balance = undefined;
+      } else {
+        throw new Errors.InvalidPrivateKey();
+      }
     }
+    this._publicKey = wallet.address;
+    this._privateKey = wallet.secret;
   };
+
+  _extends(Wallet, Account);
 
   Wallet.generate = function () {
     var wallet = rippleLib.Wallet.generate();
-    return new Wallet({ secretKey: wallet.secret });
+    return new Wallet({ privateKey: wallet.secret });
   };
 
   Wallet.prototype.sendPayment = function (options) {
@@ -44,7 +62,7 @@ var Wallet = (function () {
         if (err) {
           return reject(err);
         }
-        remote.setSecret(_this.publicKey, _this.secretKey);
+        remote.setSecret(_this.publicKey, _this.privateKey);
 
         remote.createTransaction("Payment", {
           account: _this.publicKey,
@@ -61,43 +79,15 @@ var Wallet = (function () {
     });
   };
 
-  Wallet.prototype.updateBalance = function () {
-    var _this = this;
-    return new Promise(function (resolve, reject) {
-      http.get("https://api.ripple.com/v1/accounts/" + _this.publicKey + "/balances").endAsync().then(function (response) {
-        if (response.body.success) {
-          var balance = _.filter(response.body.balances, function (balance) {
-            return balance.currency === "XRP";
-          })[0];
-          _this._balance = parseFloat(balance.value);
-          resolve(parseFloat(balance.value));
-        } else {
-          _this._balance = 0;
-          resolve(0);
-        }
-      })["catch"](reject);
-    });
-  };
-
   _classProps(Wallet, null, {
-    publicKey: {
+    privateKey: {
       get: function () {
-        return this._publicKey;
-      }
-    },
-    secretKey: {
-      get: function () {
-        return this._secretKey;
-      }
-    },
-    balance: {
-      get: function () {
-        return this._balance;
+        return this._privateKey;
       }
     }
   });
 
   return Wallet;
-})();
+})(Account);
 
 module.exports = Wallet;

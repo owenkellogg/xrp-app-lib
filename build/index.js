@@ -5,9 +5,11 @@ var _classProps = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-var Wallet = require(__dirname + "/wallet");
-var rippleLib = require("ripple-lib");
 var Promise = require("bluebird");
+var rippleLib = require("ripple-lib");
+var Wallet = require(__dirname + "/wallet");
+var Account = require(__dirname + "/account");
+var Errors = require(__dirname + "/errors");
 
 var XRPLib = (function () {
   var XRPLib = function XRPLib() {};
@@ -16,12 +18,16 @@ var XRPLib = (function () {
     return Wallet.generate();
   };
 
-  XRPLib.prototype.importWalletFromSecret = function (key) {
-    return new Wallet({ secretKey: key.toString() });
+  XRPLib.prototype.importWalletFromSecret = function (privateKey) {
+    return new Wallet({ privateKey: privateKey });
   };
 
-  XRPLib.prototype.updateBalance = function (wallet) {
-    return wallet.updateBalance();
+  XRPLib.prototype.importAccountFromAddress = function (publicKey) {
+    return new Account({ publicKey: publicKey });
+  };
+
+  XRPLib.prototype.updateBalance = function (account) {
+    return account.updateBalance();
   };
 
   XRPLib.prototype.sendPayment = function (options) {
@@ -34,6 +40,16 @@ var XRPLib = (function () {
     _Wallet: {
       get: function () {
         return Wallet;
+      }
+    },
+    _Account: {
+      get: function () {
+        return Account;
+      }
+    },
+    Errors: {
+      get: function () {
+        return Errors;
       }
     }
   });

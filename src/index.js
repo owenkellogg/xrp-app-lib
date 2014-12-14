@@ -1,6 +1,8 @@
-var Wallet = require(__dirname+'/wallet');
-var rippleLib = require('ripple-lib');
 var Promise = require('bluebird');
+var rippleLib = require('ripple-lib');
+var Wallet = require(__dirname+'/wallet');
+var Account = require(__dirname+'/account');
+var Errors = require(__dirname+'/errors');
 
 class XRPLib {
 
@@ -8,16 +10,28 @@ class XRPLib {
     return Wallet;
   }
 
+  get _Account() {
+    return Account;
+  }
+
+  get Errors() {
+    return Errors;
+  }
+
   createWallet() {
     return Wallet.generate();
   }
 
-  importWalletFromSecret(key) {
-    return new Wallet({ secretKey: key.toString() });
+  importWalletFromSecret(privateKey) {
+    return new Wallet({ privateKey: privateKey });
   }
 
-  updateBalance(wallet) {
-    return wallet.updateBalance()
+  importAccountFromAddress(publicKey) {
+    return new Account({ publicKey: publicKey });
+  }
+
+  updateBalance(account) {
+    return account.updateBalance()
   }
 
   sendPayment(options) {

@@ -1,9 +1,20 @@
-var Promise = require('bluebird');
-var http = Promise.promisifyAll(require('superagent-browserify'));
-var _ = require('lodash');
-var Account = require('./account');
-var Errors = require('./errors');
-var rippleLib = window.ripple;
+import * as Promise from 'bluebird';
+import * as _ from 'lodash';
+import Errors from './errors';
+import Account from './account';
+
+try {
+    import * as superagent from 'superagent-browserify';
+} catch(_) {
+    import * as superagent from 'superagent';
+}
+const http = Promise.promisifyAll(superagent);
+
+try {
+    const rippleLib = window.ripple;
+} catch(_) {
+    import * as rippleLib from 'ripple-lib';
+}
 
 class Wallet extends Account {
 
@@ -63,5 +74,5 @@ class Wallet extends Account {
   }
 }
 
-module.exports = Wallet;
+export default Wallet;
 

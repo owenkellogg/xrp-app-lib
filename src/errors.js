@@ -1,8 +1,8 @@
 class InvalidPrivateKey extends Error { }
 class InvalidPublicKey extends Error { }
 
-module.exports = {
+export default {
   InvalidPrivateKey: InvalidPrivateKey,
   InvalidPublicKey: InvalidPublicKey
-}
+};
 

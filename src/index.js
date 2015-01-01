@@ -1,7 +1,7 @@
-var Promise = require('bluebird');
-var Wallet = require('./wallet');
-var Account = require('./account');
-var Errors = require('./errors');
+import * as Promise from 'bluebird';
+import Wallet from './wallet';
+import Account from './account';
+import Errors from './errors';
 
 class XRPLib {
 
@@ -45,4 +45,3 @@ class XRPLib {
 }
 
 module.exports = new XRPLib();
-

@@ -17,12 +17,26 @@ var _extends = function (child, parent) {
   child.__proto__ = parent;
 };
 
-var Promise = require("bluebird");
-var http = Promise.promisifyAll(require("superagent-browserify"));
-var _ = require("lodash");
-var Account = require("./account");
-var Errors = require("./errors");
-var rippleLib = window.ripple;
+var Promise = require('bluebird');
+
+var _ = require('lodash');
+
+var Errors = require('./errors')["default"];
+var Account = require('./account')["default"];
+
+
+try {
+  var superagent = require('superagent-browserify');
+} catch (_) {
+  var superagent = require('superagent');
+}
+var http = Promise.promisifyAll(superagent);
+
+try {
+  var rippleLib = window.ripple;
+} catch (_) {
+  var rippleLib = require('ripple-lib');
+}
 
 var Wallet = (function (Account) {
   var Wallet = function Wallet(options) {
@@ -90,4 +104,4 @@ var Wallet = (function (Account) {
   return Wallet;
 })(Account);
 
-module.exports = Wallet;
+exports["default"] = Wallet;

@@ -32,7 +32,7 @@ var InvalidPublicKey = (function (Error) {
   return InvalidPublicKey;
 })(Error);
 
-module.exports = {
+exports["default"] = {
   InvalidPrivateKey: InvalidPrivateKey,
   InvalidPublicKey: InvalidPublicKey
 };

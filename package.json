@@ -12,6 +12,7 @@
   "dependencies": {
     "bluebird": "^2.3.11",
     "lodash": "^2.4.1",
+    "ripple-lib": "^0.9.4",
     "superagent": "^0.21.0",
     "superagent-browserify": "0.0.2"
   },

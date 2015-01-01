@@ -5,11 +5,25 @@ var _classProps = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-var Promise = require("bluebird");
-var http = Promise.promisifyAll(require("superagent-browserify"));
-var _ = require("lodash");
-var Errors = require("./errors");
-var rippleLib = window.ripple;
+var Promise = require('bluebird');
+
+var _ = require('lodash');
+
+var Errors = require('./errors')["default"];
+
+
+try {
+  var superagent = require('superagent-browserify');
+} catch (_) {
+  var superagent = require('superagent');
+}
+var http = Promise.promisifyAll(superagent);
+
+try {
+  var rippleLib = window.ripple;
+} catch (_) {
+  var rippleLib = require('ripple-lib');
+}
 
 var Account = (function () {
   var Account = function Account(options) {
@@ -22,19 +36,16 @@ var Account = (function () {
 
   Account.prototype.updateBalance = function () {
     var _this = this;
-    return new Promise(function (resolve, reject) {
-      http.get("https://api.ripple.com/v1/accounts/" + _this.publicKey + "/balances").endAsync().then(function (response) {
-        if (response.body.success) {
-          var balance = _.filter(response.body.balances, function (balance) {
-            return balance.currency === "XRP";
-          })[0];
-          _this._balance = parseFloat(balance.value);
-          resolve(parseFloat(balance.value));
-        } else {
-          _this._balance = 0;
-          resolve(0);
-        }
-      })["catch"](reject);
+    return http.get("https://api.ripple.com/v1/accounts/" + _this.publicKey + "/balances").endAsync().then(function (response) {
+      if (response.body.success) {
+        var balance = _.filter(response.body.balances, function (balance) {
+          return balance.currency === "XRP";
+        })[0];
+        _this._balance = parseFloat(balance.value);
+        return parseFloat(balance.value);
+      } else {
+        return _this._balance = 0;
+      }
     });
   };
 
@@ -54,4 +65,4 @@ var Account = (function () {
   return Account;
 })();
 
-module.exports = Account;
+exports["default"] = Account;

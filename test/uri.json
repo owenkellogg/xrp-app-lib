@@ -1,0 +1,14 @@
+{
+    "uris_to_pass": [
+        "ripple.com://rfemvFrpCAPc4hUa1v8mPRYdmaCqR1iFpe",
+        "ripple://rfemvFrpCAPc4hUa1v8mPRYdmaCqR1iFpe",
+        "ripple.com://send?to=rfemvFrpCAPc4hUa1v8mPRYdmaCqR1iFpe",
+        "ripple.com://send?to=rfemvFrpCAPc4hUa1v8mPRYdmaCqR1iFpe?amount=10?currency=XRP"
+    ],
+    "uris_to_fail": [
+        "ripple//rfemvFrpCAPc4hUa1v8mPRYdmaCqR1iFpe",
+        "bitcoin:rfemvFrpCAPc4hUa1v8mPRYdmaCqR1iFpe",
+        "foobar",
+        ""
+    ]
+}

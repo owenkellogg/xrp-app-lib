@@ -5,13 +5,16 @@
   "main": "./build/index.js",
   "scripts": {
     "test": "npm run build && mocha -R spec test/ --timeout 20000",
+    "test-debug": "npm run build && mocha debug -R spec test/ --timeout 20000",
     "build": "gulp"
   },
   "author": "Steven Zeiler",
   "license": "ISC",
   "dependencies": {
     "bluebird": "^2.3.11",
+    "checkit": "^0.2.0-pre",
     "lodash": "^2.4.1",
+    "query-string": "^1.0.0",
     "ripple-lib": "^0.9.4",
     "superagent": "^0.21.0",
     "superagent-browserify": "0.0.2"

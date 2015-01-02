@@ -2,6 +2,7 @@ import * as Promise from 'bluebird';
 import Wallet from './wallet';
 import Account from './account';
 import Errors from './errors';
+import decodeURI from './decodeURI';
 
 class XRPLib {
 
@@ -41,6 +42,10 @@ class XRPLib {
           options.to.updateBalance()
         ]);
       });
+  }
+
+  decodeURI(uri) {
+    return decodeURI.decode(uri);
   }
 }
 

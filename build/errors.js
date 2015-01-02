@@ -12,9 +12,21 @@ var _extends = function (child, parent) {
   child.__proto__ = parent;
 };
 
+var XError = (function (Error) {
+  var XError = function XError(message) {
+    this.message = message;
+    Error.captureStackTrace(this, this.constructor);
+  };
+
+  _extends(XError, Error);
+
+  return XError;
+})(Error);
+
 var InvalidPrivateKey = (function (Error) {
-  var InvalidPrivateKey = function InvalidPrivateKey() {
-    Error.apply(this, arguments);
+  var InvalidPrivateKey = function InvalidPrivateKey(message) {
+    this.type = "InvalidPrivateKey";
+    Error.call(this, message);
   };
 
   _extends(InvalidPrivateKey, Error);
@@ -23,8 +35,9 @@ var InvalidPrivateKey = (function (Error) {
 })(Error);
 
 var InvalidPublicKey = (function (Error) {
-  var InvalidPublicKey = function InvalidPublicKey() {
-    Error.apply(this, arguments);
+  var InvalidPublicKey = function InvalidPublicKey(message) {
+    this.type = "InvalidPublicKey";
+    Error.call(this, message);
   };
 
   _extends(InvalidPublicKey, Error);

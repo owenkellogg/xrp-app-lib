@@ -10,6 +10,7 @@ var Promise = require('bluebird');
 var Wallet = require('./wallet')["default"];
 var Account = require('./account')["default"];
 var Errors = require('./errors')["default"];
+var decodeURI = require('./decodeURI')["default"];
 var XRPLib = (function () {
   var XRPLib = function XRPLib() {};
 
@@ -33,6 +34,10 @@ var XRPLib = (function () {
     return options.from.sendPayment(options).then(function () {
       return Promise.all([options.from.updateBalance(), options.to.updateBalance()]);
     });
+  };
+
+  XRPLib.prototype.decodeURI = function (uri) {
+    return decodeURI.decode(uri);
   };
 
   _classProps(XRPLib, null, {

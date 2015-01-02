@@ -7,8 +7,6 @@ var _classProps = function (child, staticProps, instanceProps) {
 
 var Promise = require('bluebird');
 
-var _ = require('lodash');
-
 var Errors = require('./errors')["default"];
 
 
@@ -38,9 +36,15 @@ var Account = (function () {
     var _this = this;
     return http.get("https://api.ripple.com/v1/accounts/" + _this.publicKey + "/balances").endAsync().then(function (response) {
       if (response.body.success) {
-        var balance = _.filter(response.body.balances, function (balance) {
-          return balance.currency === "XRP";
-        })[0];
+        var balance;
+        for (var _iterator = response.body.balances[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+          var _balance = _step.value;
+          if (_balance.currency === "XRP") {
+            balance = _balance;
+            break;
+          }
+        }
+
         _this._balance = parseFloat(balance.value);
         return parseFloat(balance.value);
       } else {

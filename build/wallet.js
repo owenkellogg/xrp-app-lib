@@ -19,18 +19,9 @@ var _extends = function (child, parent) {
 
 var Promise = require('bluebird');
 
-var _ = require('lodash');
-
 var Errors = require('./errors')["default"];
 var Account = require('./account')["default"];
 
-
-try {
-  var superagent = require('superagent-browserify');
-} catch (_) {
-  var superagent = require('superagent');
-}
-var http = Promise.promisifyAll(superagent);
 
 try {
   var rippleLib = window.ripple;

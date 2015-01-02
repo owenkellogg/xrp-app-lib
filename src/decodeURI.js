@@ -1,4 +1,3 @@
-import * as url from 'url'
 import * as qs from 'querystring'
 import Account from './account'
 
@@ -7,15 +6,17 @@ class decodeURI {
     decode(uri) {
         if (typeof uri !== 'string') this.throw("uri is not a string")
         
-        var protocol = url.parse(uri, true,/* query-string parsing */ true).protocol // host after slashes
-
         var params
+        var protocol = uri.replace(/\s/g, '').match(/^([a-z\.]+):\/\//) // host after slashes
+
+        if (!(protocol instanceof Array && protocol.length === 2)) this.throw("protocol not supported")
+        protocol = protocol[1]
 
         switch (protocol) {
-            case "ripple.com:":
+            case "ripple.com":
                 params = this.parseURI('ripple.com://', uri)
                 break
-            case "ripple:":
+            case "ripple":
                 params = this.parseURI('ripple://', uri)
                 break
             default:
@@ -75,6 +76,8 @@ class decodeURI {
         else if (parts.length === 2) {
             var out = qs.parse(parts[1])
             out.action = parts[0]
+            out.parsedURI = parsedURI
+            out.rawURI = uri
             return out
         }
         

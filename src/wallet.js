@@ -1,14 +1,6 @@
 import * as Promise from 'bluebird';
-import * as _ from 'lodash';
 import Errors from './errors';
 import Account from './account';
-
-try {
-    import * as superagent from 'superagent-browserify';
-} catch(_) {
-    import * as superagent from 'superagent';
-}
-const http = Promise.promisifyAll(superagent);
 
 try {
     const rippleLib = window.ripple;

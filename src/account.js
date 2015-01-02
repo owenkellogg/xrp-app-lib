@@ -1,5 +1,4 @@
 import * as Promise from 'bluebird';
-import * as _ from 'lodash';
 import Errors from './errors';
 
 try {
@@ -39,9 +38,12 @@ class Account {
                .endAsync()
                .then(function(response) {
                    if (response.body.success) {
-                       var balance = _.filter(response.body.balances, function(balance) {
-                           return balance.currency === 'XRP';
-                       })[0];
+                       var balance
+                       for (let _balance of response.body.balances)
+                           if (_balance.currency === 'XRP') {
+                               balance = _balance
+                               break
+                           }
                        _this._balance = parseFloat(balance.value); 
                        return parseFloat(balance.value);
                    } else {

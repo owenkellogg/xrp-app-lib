@@ -3,6 +3,7 @@ import Wallet from './wallet';
 import Account from './account';
 import Errors from './errors';
 import decodeURI from './decodeURI';
+import Listener from 'xrp-account-listener-browserify'
 
 class XRPLib {
 
@@ -16,6 +17,10 @@ class XRPLib {
 
   get Errors() {
     return Errors;
+  }
+
+  get Listener() {
+    return Listener
   }
 
   createWallet() {

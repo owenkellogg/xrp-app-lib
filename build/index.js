@@ -5,12 +5,13 @@ var _classProps = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-"use strict";
-var Promise = require("bluebird");
-var Wallet = require(__dirname + "/wallet");
-var Account = require(__dirname + "/account");
-var Errors = require(__dirname + "/errors");
+var Promise = require('bluebird');
 
+var Wallet = require('./wallet')["default"];
+var Account = require('./account')["default"];
+var Errors = require('./errors')["default"];
+var decodeURI = require('./decodeURI')["default"];
+var Listener = require('xrp-account-listener-browserify')["default"];
 var XRPLib = (function () {
   var XRPLib = function XRPLib() {};
 
@@ -50,6 +51,11 @@ var XRPLib = (function () {
     Errors: {
       get: function () {
         return Errors;
+      }
+    },
+    Listener: {
+      get: function () {
+        return Listener;
       }
     }
   });

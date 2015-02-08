@@ -15,7 +15,8 @@
     "query-string": "^1.0.0",
     "ripple-lib": "^0.9.4",
     "superagent": "^0.21.0",
-    "superagent-browserify": "0.0.2"
+    "superagent-browserify": "0.0.2",
+    "xrp-account-listener-browserify": "^1.0.1"
   },
   "devDependencies": {
     "gulp": "^3.8.10",

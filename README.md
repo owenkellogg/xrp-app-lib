@@ -3,6 +3,8 @@
 
 A small javascript library for creating XRP-based wallets
 
+[![CircleCI](https://circleci.com/gh/stevenzeiler/xrp-app-lib.svg?style=svg)](https://circleci.com/gh/stevenzeiler/xrp-app-lib)
+
 ## Installation
 
     npm install --save xrp-app-lib

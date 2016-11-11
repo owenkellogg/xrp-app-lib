@@ -1,5 +1,6 @@
+'use strict';
 var Promise = require('bluebird');
-var rippleLib = require('ripple-lib');
+var rippleLibDeprecated = require('ripple-lib-0.9.4');
 var http = Promise.promisifyAll(require('superagent'));
 var _ = require('lodash');
 var Account = require(__dirname+'/account');
@@ -11,24 +12,23 @@ class Wallet extends Account {
     var wallet;
 
     if (!options) {
-      wallet = rippleLib.Wallet.generate();
-      this._balance = 0;
+      wallet = rippleLibDeprecated.Wallet.generate();
     } else {
-      if (rippleLib.Seed.is_valid(options.privateKey)) {
+      if (rippleLibDeprecated.Seed.is_valid(options.privateKey)) {
         var secret = options.privateKey;
-        wallet = new rippleLib.Wallet(secret);
+        wallet = new rippleLibDeprecated.Wallet(secret);
         wallet.address = wallet.getAddress().value;
-        this._balance = undefined;
       } else {
         throw new Errors.InvalidPrivateKey
       }
     }
+    super({publicKey: wallet.address});
     this._publicKey = wallet.address;
     this._privateKey = wallet.secret;
   }
 
   static generate() {
-    var wallet = rippleLib.Wallet.generate();
+    var wallet = rippleLibDeprecated.Wallet.generate();
     return new Wallet({ privateKey: wallet.secret });
   }
 
@@ -38,7 +38,7 @@ class Wallet extends Account {
 
   sendPayment(options) {
     var _this = this;
-    var remote = new rippleLib.Remote({
+    var remote = new rippleLibDeprecated.Remote({
       servers: [
         { host: 's1.ripple.com', port: 443, secure: true }
       ]

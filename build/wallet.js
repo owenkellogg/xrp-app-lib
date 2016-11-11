@@ -17,8 +17,9 @@ var _extends = function (child, parent) {
   child.__proto__ = parent;
 };
 
+"use strict";
 var Promise = require("bluebird");
-var rippleLib = require("ripple-lib");
+var rippleLibDeprecated = require("ripple-lib-0.9.4");
 var http = Promise.promisifyAll(require("superagent"));
 var _ = require("lodash");
 var Account = require(__dirname + "/account");
@@ -29,18 +30,17 @@ var Wallet = (function (Account) {
     var wallet;
 
     if (!options) {
-      wallet = rippleLib.Wallet.generate();
-      this._balance = 0;
+      wallet = rippleLibDeprecated.Wallet.generate();
     } else {
-      if (rippleLib.Seed.is_valid(options.privateKey)) {
+      if (rippleLibDeprecated.Seed.is_valid(options.privateKey)) {
         var secret = options.privateKey;
-        wallet = new rippleLib.Wallet(secret);
+        wallet = new rippleLibDeprecated.Wallet(secret);
         wallet.address = wallet.getAddress().value;
-        this._balance = undefined;
       } else {
         throw new Errors.InvalidPrivateKey();
       }
     }
+    Account.call(this, { publicKey: wallet.address });
     this._publicKey = wallet.address;
     this._privateKey = wallet.secret;
   };
@@ -48,13 +48,13 @@ var Wallet = (function (Account) {
   _extends(Wallet, Account);
 
   Wallet.generate = function () {
-    var wallet = rippleLib.Wallet.generate();
+    var wallet = rippleLibDeprecated.Wallet.generate();
     return new Wallet({ privateKey: wallet.secret });
   };
 
   Wallet.prototype.sendPayment = function (options) {
     var _this = this;
-    var remote = new rippleLib.Remote({
+    var remote = new rippleLibDeprecated.Remote({
       servers: [{ host: "s1.ripple.com", port: 443, secure: true }]
     });
     return new Promise(function (resolve, reject) {

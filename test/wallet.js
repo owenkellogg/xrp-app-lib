@@ -1,5 +1,5 @@
-var wallets = require(__dirname+'/wallets.json').wallets;
-var XRPLib = require(__dirname+'/../');
+var wallets = require('./wallets.json').wallets;
+var XRPLib = require('../src');
 var assert = require('assert');
 
 describe('Wallets', function() {

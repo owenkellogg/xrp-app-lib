@@ -26,6 +26,7 @@ describe('Accounts', function() {
     var account = XRPLib.importAccountFromAddress(wallets[0].address);
 
     XRPLib.updateBalance(account).then(function(balance) {
+      console.log('XRPLib.updateBalance:result', balance)
       assert(account.balance > 0);
       assert.strictEqual(account.balance, balance);
       done();

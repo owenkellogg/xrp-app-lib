@@ -12,6 +12,8 @@ var _extends = function (child, parent) {
   child.__proto__ = parent;
 };
 
+"use strict";
+
 var InvalidPrivateKey = (function (Error) {
   var InvalidPrivateKey = function InvalidPrivateKey() {
     Error.apply(this, arguments);

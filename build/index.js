@@ -5,8 +5,8 @@ var _classProps = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
+"use strict";
 var Promise = require("bluebird");
-var rippleLib = require("ripple-lib");
 var Wallet = require(__dirname + "/wallet");
 var Account = require(__dirname + "/account");
 var Errors = require(__dirname + "/errors");

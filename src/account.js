@@ -1,13 +1,28 @@
+'use strict';
 var Promise = require('bluebird');
 var http = Promise.promisifyAll(require('superagent'));
-var rippleLib = require('ripple-lib');
+var deprecatedRippleLib = require('ripple-lib-0.9.4');
 var _ = require('lodash');
 var Errors = require(__dirname+'/errors');
+var RippleAPI = require("ripple-lib").RippleAPI
+
+function parseXRPBalance(balances) {
+  
+  var balance = undefined;
+
+  balances.forEach(b => {
+    if (b.currency === "XRP") {
+      balance = parseFloat(b.value)
+    }
+  })
+
+  return balance
+}
 
 class Account {
 
   constructor(options) {
-    if (options && rippleLib.UInt160.is_valid(options.publicKey)) {
+    if (options && deprecatedRippleLib.UInt160.is_valid(options.publicKey)) {
       this._publicKey = options.publicKey;
     } else {
       throw new Errors.InvalidPublicKey
@@ -24,22 +39,22 @@ class Account {
 
   updateBalance() {
     var _this = this;
-    return new Promise(function(resolve, reject) {
-      http.get('https://api.ripple.com/v1/accounts/'+_this.publicKey+'/balances').endAsync()
-        .then(function(response) {
-          if (response.body.success) {
-            var balance = _.filter(response.body.balances, function(balance) {
-              return balance.currency === 'XRP'
-            })[0];
-            _this._balance = parseFloat(balance.value); 
-            resolve(parseFloat(balance.value));
-          } else {
-            _this._balance = 0;
-            resolve(0);
-          }
+
+    return new Promise((resolve, reject) => {
+      const ripple = new RippleAPI({server: 'wss://s1.ripple.com:443'});
+
+      ripple.connect().then(() => {
+
+        ripple.getBalances(_this.publicKey).then(balances => {
+          _this._balance = parseXRPBalance(balances);
+          resolve(_this._balance)
         })
-        .catch(reject);
-    });
+        .catch(error => {
+          _this._balance = 0;
+          reject(error)
+        })
+      })
+    })
   }
 }
 

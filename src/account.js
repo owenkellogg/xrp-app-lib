@@ -47,10 +47,12 @@ class Account {
 
         ripple.getBalances(_this.publicKey).then(balances => {
           _this._balance = parseXRPBalance(balances);
+          ripple.disconnect();
           resolve(_this._balance)
         })
         .catch(error => {
           _this._balance = 0;
+          ripple.disconnect();
           reject(error)
         })
       })

@@ -43,9 +43,11 @@ var Account = (function () {
       ripple.connect().then(function () {
         ripple.getBalances(_this.publicKey).then(function (balances) {
           _this._balance = parseXRPBalance(balances);
+          ripple.disconnect();
           resolve(_this._balance);
         })["catch"](function (error) {
           _this._balance = 0;
+          ripple.disconnect();
           reject(error);
         });
       });
